@@ -1,0 +1,1 @@
+const t=new Intl.NumberFormat("es-BO",{style:"currency",currency:"BOB",minimumFractionDigits:2,maximumFractionDigits:2});function e(r){const n=Number(r);return Number.isFinite(n)?t.format(n):t.format(0)}function i(r){const n=Math.round(Number(r)||0);return n>0?`-${n} %`:""}const o=r=>!!r?.compareAtPrice&&Number(r.compareAtPrice)>Number(r.price);export{i as a,e as f,o as i};

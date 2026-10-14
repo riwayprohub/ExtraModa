@@ -3,10 +3,8 @@
  *
  * Decisiones que explican casi todo este fichero:
  *
- * 1. `BASE = '/api/v1'` y nada de variable de entorno. El frontend y la API se
- *    sirven desde el MISMO servicio Render, así que en producción ya son el mismo
- *    origen. En desarrollo, Vite hace de proxy hacia el puerto 3000. Con eso no
- *    hay CORS ni dominios que mantener sincronizados.
+ * 1. `BASE`: En producción apunta directamente al Web Service de Render del backend.
+ *    En desarrollo, Vite hace de proxy hacia el puerto 3000 si no se define.
  *
  * 2. El access token vive en memoria, no en localStorage. Si lo guardáramos en
  *    localStorage, cualquier XSS podría leerlo; aquí un robo de token exigiría
@@ -20,7 +18,13 @@
  *    cierre de sesión fantasma. `pendingRefresh` serializa el refresco.
  */
 
-export const BASE = '/api/v1';
+// Si definiste VITE_API_URL en las variables de entorno de Render para el Frontend, la usará.
+// Si no, por defecto apuntará a tu backend en Render en producción, o ruta relativa en local.
+const PRODUCTION_BACKEND = 'https://backend-extramoda.onrender.com';
+
+export const BASE = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api/v1` 
+  : (import.meta.env.PROD ? `${PRODUCTION_BACKEND}/api/v1` : '/api/v1');
 
 const REFRESH_PATH = '/auth/refresh';
 
@@ -174,7 +178,7 @@ async function perform(path, { method = 'GET', retryOn401 = true, body, form, he
 
     // Token nuevo y aun así 401: no es un fallo de red ni un error del recurso,
     // la sesión está revocada. Aquí SÍ hay que limpiar, y antes esto no pasaba:
-    // el `if (error instanceof ApiError) throw error` dejasaba al 401 del
+    // el `if (error instanceof ApiError) throw error` dejaba al 401 del
     // reintento por el mismo camino que un 404 y la app se quedaba creyendo
     // que el usuario seguía conectado.
     if (retried.status === 401) loseSession();

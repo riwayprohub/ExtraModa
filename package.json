@@ -8,6 +8,9 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "pinia": "^3.0.3",
     "vue": "^3.5.22",

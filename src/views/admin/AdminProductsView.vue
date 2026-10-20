@@ -12,7 +12,7 @@
 
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { adminApi, categoriesApi } from '@/api';
+import { adminApi, categoriesApi, assetUrl } from '@/api';
 import { formatMoney } from '@/utils/money.js';
 
 import BaseButton from '@/components/BaseButton.vue';
@@ -185,7 +185,7 @@ onMounted(load);
             class="cards__link"
             :to="{ name: 'admin-product-edit', params: { key: product.slug } }"
           >
-            <img v-if="product.images?.length" class="cards__img" :src="product.images[0].url" :alt="product.images[0].altText" />
+            <img v-if="product.images?.length" class="cards__img" :src="assetUrl(product.images[0].url)" :alt="product.images[0].altText" />
             <span v-else class="cards__img cards__img--empty" aria-hidden="true" />
             <span class="cards__body">
               <span class="cards__name">{{ product.name }}</span>

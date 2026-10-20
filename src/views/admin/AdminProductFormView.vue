@@ -17,7 +17,7 @@
 
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { adminApi, categoriesApi } from '@/api';
+import { adminApi, categoriesApi, assetUrl } from '@/api';
 import { useToastStore } from '@/stores/toast.js';
 import { formatMoney } from '@/utils/money.js';
 
@@ -340,7 +340,7 @@ onMounted(load);
 
         <ul v-if="product.images.length" class="photos">
           <li v-for="image in product.images" :key="image.id" class="photos__item">
-            <img class="photos__img" :src="image.url" :alt="image.altText ?? product.name" />
+            <img class="photos__img" :src="assetUrl(image.url)" :alt="image.altText ?? product.name" />
             <button class="photos__remove" type="button" @click="removeImage(image)">
               Quitar
             </button>

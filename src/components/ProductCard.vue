@@ -12,6 +12,7 @@
 
 import { computed } from 'vue';
 import { formatMoney, formatDiscount, isDiscounted } from '@/utils/money.js';
+import { assetUrl } from '@/api';
 
 const props = defineProps({
   product: { type: Object, required: true },
@@ -19,7 +20,7 @@ const props = defineProps({
   layout: { type: String, default: 'grid' }
 });
 
-const image = computed(() => props.product.images?.[0]?.url ?? null);
+const image = computed(() => assetUrl(props.product.images?.[0]?.url ?? null));
 const alt = computed(() => props.product.images?.[0]?.altText || props.product.name);
 const discounted = computed(() => isDiscounted(props.product));
 

@@ -13,7 +13,7 @@
  */
 
 import { computed, onMounted, ref, watch } from 'vue';
-import { productsApi } from '@/api';
+import { productsApi, assetUrl } from '@/api';
 import { useAuthStore } from '@/stores/auth.js';
 import { useCartStore } from '@/stores/cart.js';
 import { useToastStore } from '@/stores/toast.js';
@@ -209,7 +209,7 @@ const categorySlug = computed(() => product.value?.category?.slug ?? '');
           <div class="gallery__main">
             <img
               v-if="product.images[activeImage]"
-              :src="product.images[activeImage].url"
+              :src="assetUrl(product.images[activeImage].url)"
               :alt="product.images[activeImage].altText || product.name"
               class="gallery__img"
             />
@@ -223,14 +223,14 @@ const categorySlug = computed(() => product.value?.category?.slug ?? '');
           <div v-if="product.images.length > 1" class="gallery__thumbs">
             <button
               v-for="(image, index) in product.images"
-              :key="image.url + index"
+              :key="assetUrl(image.url) + index"
               class="gallery__thumb"
               :class="{ 'is-active': index === activeImage }"
               type="button"
               :aria-label="`Ver imagen ${index + 1}`"
               @click="activeImage = index"
             >
-              <img :src="image.url" :alt="image.altText || ''" loading="lazy" />
+              <img :src="assetUrl(image.url)" :alt="image.altText || ''" loading="lazy" />
             </button>
           </div>
         </div>

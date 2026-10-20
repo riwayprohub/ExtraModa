@@ -20,13 +20,34 @@
 
 // Si definiste VITE_API_URL en las variables de entorno de Render para el Frontend, la usará.
 // Si no, por defecto apuntará a tu backend en Render en producción, o ruta relativa en local.
-const PRODUCTION_BACKEND = 'https://backend-extramoda.onrender.com';
+// El nombre EXACTO (gestión de Render → Settings → Name) es el que va aquí: un
+// guion de más o de menos y DNS ni siquiera conoce el dominio (comprobado: el
+// servicio se llama "extramoda-backend", no "backend-extramoda").
+const PRODUCTION_BACKEND = 'https://extramoda-backend.onrender.com';
 
 export const BASE = import.meta.env.VITE_API_URL 
   ? `${import.meta.env.VITE_API_URL}/api/v1` 
   : (import.meta.env.PROD ? `${PRODUCTION_BACKEND}/api/v1` : '/api/v1');
 
 const REFRESH_PATH = '/auth/refresh';
+
+/**
+ * La API devuelve las URLs de las imágenes como rutas RELATIVAS al propio
+ * backend ('/api/v1/images/...', '/api/v1/site-images/...'). En un despliegue
+ * de un solo dominio funciona, pero con la SPA y la API en servicios distintos
+ * de Render un `<img src="/api/v1/...">` se resuelve contra el dominio del
+ * frontend (un hosting estático sin /api) y NINGUNA foto se ve: la petición
+ * responde 404 aunque el binario esté guardado en la base.
+ *
+ * assetUrl rebasa las rutas relativas al origen real de la API. Las URLs
+ * absolutas (las fotos de Unsplash del seed) pasan tal cual. En desarrollo BASE
+ * es relativo y Vite proxifica /api hacia localhost: aquí no cambia nada.
+ */
+export function assetUrl(url) {
+  if (!url || !url.startsWith('/')) return url ?? null;
+  if (!BASE.startsWith('http')) return url;
+  return `${new URL(BASE).origin}${url}`;
+}
 
 let accessToken = null;
 let pendingRefresh = null;

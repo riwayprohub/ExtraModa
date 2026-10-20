@@ -14,7 +14,7 @@
 
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { productsApi, categoriesApi, siteImagesApi } from '@/api';
+import { productsApi, categoriesApi, siteImagesApi, assetUrl } from '@/api';
 import { useToastStore } from '@/stores/toast.js';
 import { STORE } from '@/data/navigation.js';
 
@@ -63,7 +63,7 @@ async function load() {
     // todavía: son la carta de presentación de la tienda. La foto de fondo de
     // cada una la sube el admin desde el panel ("Imágenes de inicio").
     const bySlug = new Map(todas.map((category) => [category.slug, category]));
-    const photoBySlot = new Map(fotos.map((image) => [image.slot, image.url]));
+    const photoBySlot = new Map(fotos.map((image) => [image.slot, assetUrl(image.url)]));
 
     categories.value = HOME_CATEGORY_SLUGS.filter((slug) => bySlug.has(slug)).map((slug) => {
       const category = bySlug.get(slug);

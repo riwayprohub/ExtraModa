@@ -9,6 +9,9 @@
 
 import { get, post, patch, del, toQuery, request, requestFull } from './client.js';
 
+/** Las vistas de imagen lo importan desde aquí como el resto de la API. */
+export { assetUrl } from './client.js';
+
 export const authApi = {
   register: (body) => post('/auth/register', body),
   login: (body) => post('/auth/login', body),

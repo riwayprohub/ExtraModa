@@ -13,7 +13,7 @@
 
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { ordersApi } from '@/api';
+import { ordersApi, assetUrl } from '@/api';
 import { useCartStore } from '@/stores/cart.js';
 import { useToastStore } from '@/stores/toast.js';
 import { formatMoney } from '@/utils/money.js';
@@ -149,7 +149,7 @@ async function confirmCancel() {
           <ul class="items">
             <li v-for="item in order.items" :key="item.sku" class="item">
               <RouterLink class="item__media" :to="`/producto/${item.productSlug}`">
-                <img v-if="item.imageUrl" :src="item.imageUrl" :alt="item.productName" loading="lazy" />
+                <img v-if="item.imageUrl" :src="assetUrl(item.imageUrl)" :alt="item.productName" loading="lazy" />
                 <span v-else class="item__placeholder" aria-hidden="true">EX</span>
               </RouterLink>
 

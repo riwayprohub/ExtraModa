@@ -13,7 +13,7 @@
  */
 
 import { onMounted, ref } from 'vue';
-import { siteImagesApi } from '@/api';
+import { siteImagesApi, assetUrl } from '@/api';
 import { useToastStore } from '@/stores/toast.js';
 
 const toast = useToastStore();
@@ -129,7 +129,7 @@ onMounted(load);
             v-if="bySlot(item.slot)"
             class="preview__img"
             :class="item.slot.startsWith('category-') ? 'preview__img--cat' : 'preview__img--hero'"
-            :src="bySlot(item.slot).url"
+            :src="assetUrl(bySlot(item.slot).url)"
             :alt="bySlot(item.slot).altText ?? item.title"
           />
           <div v-else class="preview__empty">
